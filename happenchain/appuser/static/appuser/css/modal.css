@@ -1,0 +1,155 @@
+/* =============================
+   PROFESSIONAL MODAL STYLES
+   ============================= */
+
+/* 1. The Overlay (Background) */
+.modal-overlay {
+    position: fixed;
+    inset: 0; /* Shorthand for top/left/right/bottom: 0 */
+    background: rgba(5, 5, 17, 0.6);
+    backdrop-filter: blur(12px); /* heavy glass blur */
+    -webkit-backdrop-filter: blur(12px);
+    z-index: 2000;
+    
+    /* Flex alignment (Hidden by default via JS) */
+    display: none; 
+    align-items: center;
+    justify-content: center;
+
+    /* Animation when JS switches it to 'flex' */
+    animation: fadeInOverlay 0.3s ease-out forwards;
+}
+
+/* 2. The Modal Card */
+.modal {
+    background: linear-gradient(145deg, rgba(20, 27, 61, 0.95), rgba(10, 14, 35, 0.98));
+    border: 1px solid rgba(0, 229, 255, 0.2); /* Subtle neon border */
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+    border-radius: 20px;
+    padding: 35px;
+    width: 90%;
+    max-width: 480px;
+    position: relative;
+    overflow: hidden;
+
+    /* Animation when opened */
+    animation: modalSlideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Optional: Top glow effect */
+.modal::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 4px;
+    background: linear-gradient(90deg, transparent, var(--primary, #00E5FF), transparent);
+}
+
+/* 3. Typography & Headers */
+.modal h3 {
+    color: #fff;
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-top: 0;
+    letter-spacing: -0.5px;
+}
+
+.form-label {
+    color: var(--text-muted, #94A3B8);
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 8px;
+    display: block;
+}
+
+/* 4. Inputs */
+.form-input {
+    width: 100%;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    padding: 12px 15px;
+    color: #fff;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+.form-input:focus {
+    outline: none;
+    border-color: var(--primary, #00E5FF);
+    background: rgba(0, 229, 255, 0.05);
+    box-shadow: 0 0 0 4px rgba(0, 229, 255, 0.1);
+}
+
+/* 5. Custom Friend List & Scrollbar */
+.friend-list-container {
+    max-height: 180px; 
+    overflow-y: auto; 
+    background: rgba(0,0,0,0.2); 
+    padding: 10px; 
+    border-radius: 12px;
+    border: 1px solid rgba(255,255,255,0.05);
+}
+
+/* Custom Scrollbar */
+.friend-list-container::-webkit-scrollbar { width: 6px; }
+.friend-list-container::-webkit-scrollbar-track { background: rgba(255,255,255,0.02); }
+.friend-list-container::-webkit-scrollbar-thumb { 
+    background: rgba(255,255,255,0.1); 
+    border-radius: 10px; 
+}
+.friend-list-container::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.2); }
+
+/* 6. Custom Checkboxes */
+.friend-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.2s;
+    border-bottom: 1px solid rgba(255,255,255,0.03);
+}
+
+.friend-item:hover {
+    background: rgba(255,255,255,0.05);
+}
+
+.friend-item input[type="checkbox"] {
+    appearance: none; /* Hide default browser checkbox */
+    width: 20px;
+    height: 20px;
+    border: 2px solid rgba(255,255,255,0.3);
+    border-radius: 6px;
+    position: relative;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.friend-item input[type="checkbox"]:checked {
+    background-color: var(--primary, #00E5FF);
+    border-color: var(--primary, #00E5FF);
+}
+
+.friend-item input[type="checkbox"]:checked::after {
+    content: '✓';
+    position: absolute;
+    color: #000;
+    font-size: 14px;
+    font-weight: bold;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+/* 7. Animations */
+@keyframes fadeInOverlay {
+    from { opacity: 0; backdrop-filter: blur(0px); }
+    to { opacity: 1; backdrop-filter: blur(12px); }
+}
+
+@keyframes modalSlideUp {
+    from { opacity: 0; transform: translateY(30px) scale(0.95); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+}

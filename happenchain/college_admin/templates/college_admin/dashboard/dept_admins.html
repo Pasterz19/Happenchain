@@ -1,0 +1,125 @@
+{% extends "college_admin/base/base_dashboard.html" %}
+{% block title %}Department Admins{% endblock %}
+
+{% block content %}
+
+<header class="top-bar">
+    <div class="welcome-text">
+        <h1>Department Admins</h1>
+        <p class="text-muted">Add and manage department administrators.</p>
+    </div>
+</header>
+
+<!-- ================= ADD ADMIN ================= -->
+<div class="card" style="margin-bottom:30px;">
+    <div class="card-header">
+        <h3><i class="fas fa-user-plus"></i> Add Department Admin</h3>
+    </div>
+
+    <form method="post">
+        {% csrf_token %}
+
+        <div class="form-grid">
+
+    <div>
+        <label class="text-muted">Department</label>
+        <select name="department" class="dark-select" required>
+            <option value="">Select</option>
+            {% for dept in departments %}
+                <option value="{{ dept.id }}">{{ dept.name }}</option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <div>
+        <label class="text-muted">Admin Name</label>
+        <input type="text" name="admin_name" class="dark-select" required>
+    </div>
+
+    <div>
+        <label class="text-muted">Email</label>
+        <input type="email" name="email" class="dark-select" required>
+    </div>
+
+    <div>
+        <label class="text-muted">Phone</label>
+        <input type="text" name="phone" class="dark-select" required>
+    </div>
+
+    <div>
+        <label class="text-muted">Password</label>
+        <input type="password" name="password" class="dark-select" required>
+    </div>
+
+</div>
+
+
+        <div style="margin-top:20px;">
+            <button class="btn btn-primary">
+                <i class="fas fa-plus"></i> Add Admin
+            </button>
+        </div>
+    </form>
+</div>
+
+<!-- ================= SHOW ADMINS ================= -->
+<div class="card table-card">
+    <div class="card-header">
+        <h3><i class="fas fa-users-cog"></i> Registered Department Admins</h3>
+    </div>
+
+    <div class="table-responsive">
+        <table>
+            <thead>
+                <tr>
+                    <th>Department</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+
+            <tbody>
+            {% for admin in dept_admins %}
+                <tr>
+                    <td>{{ admin.department.name }}</td>
+                    <td>{{ admin.auth_user.get_full_name }}</td>
+                    <td class="text-muted">{{ admin.auth_user.email }}</td>
+
+                    <td>
+                        {% if admin.auth_user.is_active %}
+                            <span class="status-badge status-upcoming">Active</span>
+                        {% else %}
+                            <span class="status-badge status-pending">Inactive</span>
+                        {% endif %}
+                    </td>
+
+                    <td>
+                        <div class="action-btns">
+                            {% if admin.auth_user.is_active %}
+                                <a href="{% url 'college_admin:toggle_department_admin' admin.id %}"
+                                   class="btn-reject" title="Deactivate">
+                                    <i class="fas fa-ban"></i>
+                                </a>
+                            {% else %}
+                                <a href="{% url 'college_admin:toggle_department_admin' admin.id %}"
+                                   class="btn-approve" title="Activate">
+                                    <i class="fas fa-check"></i>
+                                </a>
+                            {% endif %}
+                        </div>
+                    </td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="5" class="text-muted">No department admins found.</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+
+        </table>
+    </div>
+</div>
+
+{% endblock %}

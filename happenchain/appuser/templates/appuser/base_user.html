@@ -1,0 +1,76 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Happen Chain{% endblock %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <link rel="stylesheet" href="{% static 'authapp/css/base.css' %}">
+    <link rel="stylesheet" href="{% static 'appuser/css/toast.css' %}">
+    <link rel="stylesheet" href="{% static 'appuser/css/base_user.css' %}">
+
+    {% block extra_css %}{% endblock %}
+</head>
+
+<body>
+
+    {% if messages %}
+    <div class="toast-container">
+        {% for message in messages %}
+        <div class="toast toast-{{ message.tags }}">
+            {{ message }}
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <header class="header scrolled">
+        <div class="nav-container">
+            <a href="{% url 'appuser:user_dashboard' %}" class="logo">
+                <i class="fas fa-link"></i> Happen Chain
+            </a>
+
+            <div class="search-wrapper">
+                <i class="fas fa-search search-icon"></i>
+                <input type="text" placeholder="Search events..." onkeyup="filterEvents(this.value)">
+            </div>
+
+            <nav class="nav-actions">
+                <a href="{% url 'appuser:registrations' %}" class="nav-link">My Registrations</a>
+                <a href="{% url 'appuser:friends' %}" class="nav-link">Friends</a>
+                <a href="{% url 'appuser:payments' %}" class="nav-link">Payments</a>
+                <a href="{% url 'appuser:my_complaints' %}" class="nav-link">Complaints</a>
+
+                <a href="{% url 'appuser:user_profile' %}" class="btn btn-outline nav-btn">
+                    <i class="far fa-user"></i> Profile
+                </a>
+
+                <form method="post" action="{% url 'common-logout' %}" style="display:inline;">
+                    {% csrf_token %}
+                    <button class="logout-btn" type="submit" title="Logout">
+                        <i class="fas fa-sign-out-alt"></i>
+                    </button>
+                </form>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <div class="container">
+            {% block content %}{% endblock %}
+        </div>
+    </main>
+
+    {% block scripts %}{% endblock %}
+    <script src="{% static 'appuser/js/toast.js' %}"></script>
+    <script src="{% static 'appuser/js/dashboard.js' %}"></script>
+</body>
+
+</html>

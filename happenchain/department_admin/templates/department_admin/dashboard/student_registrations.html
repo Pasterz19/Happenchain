@@ -1,0 +1,82 @@
+{% extends "department_admin/base/base.html" %}
+{% load static %}
+{% block title %}Student Registration Requests{% endblock %}
+
+{% block content %}
+<header class="top-bar">
+    <h1>Student Registrations</h1>
+</header>
+
+<div class="table-container">
+    <table id="studentTable" class="table table-dark table-hover align-middle">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>College</th>
+                <th>Course</th>
+                <th>College ID Photo</th>
+                <th>Status</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for student in students %}
+            <tr>
+                <td>{{ student.id }}</td>
+                <td>
+                    {{ student.auth_user.first_name }} {{ student.auth_user.last_name }}
+                </td>
+
+                <td>{{ student.auth_user.email }}</td>
+
+                <td>{{ student.college.name }}</td>
+
+                <td>{{ student.course.name }}</td>
+
+                <td>
+                    {% if student.id_photo %}
+                    <a href="{{ student.id_photo.url }}" target="_blank" rel="noopener noreferrer"
+                        class="text-primary hover-underline">
+                        View Photo
+                    </a>
+                    {% else %}
+                    <span class="text-muted">No Photo</span>
+                    {% endif %}
+                </td>
+
+                <td>
+                    {% if student.verification_status == "ACCEPTED" %}
+                    <span class="status-approved">Approved</span>
+                    {% else %}
+                    <span class="status-pending">Pending</span>
+                    {% endif %}
+                </td>
+
+                <td>
+                    <a href="{% url 'department_admin:toggle-student-status' student.id %}"
+                        class="btn btn-sm {% if student.verification_status == 'ACCEPTED' %}btn-reject{% else %}btn-approve{% endif %}">
+                        {% if student.verification_status == "ACCEPTED" %}
+                        Disable
+                        {% else %}
+                        Approve
+                        {% endif %}
+                    </a>
+                </td>
+            </tr>
+            {% empty %}
+            <!-- Fixed colspan to match header count (8) to prevent DataTables error -->
+            <!-- Note: DataTables emptyTable language option usually handles this, but having correct HTML structure is cleaner -->
+            <!-- Logic inside JS 'emptyTable' handles the message, loop logic in Django just won't output rows -->
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'department_admin/js/student_registrations.js' %}"></script>
+{% endblock %}

@@ -1,0 +1,69 @@
+{% extends "appuser/base_user.html" %}
+{% load static %}
+
+{% block title %}Friend Requests | Happen Chain{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'appuser/css/friends.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="requests-container">
+    <div style="height: 40px;"></div> <!-- Hard spacer to force content down -->
+    <!-- 
+    <header style="margin-bottom: 30px;">
+        <a href="{% url 'appuser:friends' %}" class="text-muted" style="font-size: 0.9rem;">
+            <i class="fas fa-arrow-left"></i> Back to Friends
+        </a>
+        <h1 style="margin-top: 10px;">Friend Requests</h1>
+    </header> -->
+
+    <!-- INCOMING REQUESTS -->
+    <div class="requests-section">
+        <h3><i class="fas fa-envelope-open-text" style="color: #4ade80;"></i> Incoming Requests</h3>
+
+        {% for req in incoming %}
+        <div class="request-item">
+            <span class="request-user">
+                <i class="fas fa-user-circle" style="margin-right: 8px; color: var(--text-muted);"></i>
+                {{ req.from_user.get_full_name|default:req.from_user.username }}
+            </span>
+
+            <div class="request-actions">
+                <a href="{% url 'appuser:accept_friend' req.id %}" class="btn-accept">
+                    <i class="fas fa-check"></i> Accept
+                </a>
+                <a href="{% url 'appuser:reject_friend' req.id %}" class="btn-reject">
+                    <i class="fas fa-times"></i> Reject
+                </a>
+            </div>
+        </div>
+        {% empty %}
+        <div class="no-requests">
+            No pending incoming requests
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- OUTGOING REQUESTS -->
+    <div class="requests-section">
+        <h3><i class="fas fa-paper-plane" style="color: #60a5fa;"></i> Outgoing Requests</h3>
+
+        {% for req in outgoing %}
+        <div class="request-item">
+            <span class="request-user">
+                {{ req.to_user.get_full_name|default:req.to_user.username }}
+            </span>
+            <span class="status-badge" style="background: rgba(255,255,255,0.1); color: var(--text-muted);">
+                <i class="fas fa-clock"></i> Pending
+            </span>
+        </div>
+        {% empty %}
+        <div class="no-requests">
+            No pending outgoing requests
+        </div>
+        {% endfor %}
+    </div>
+
+</div>
+{% endblock %}

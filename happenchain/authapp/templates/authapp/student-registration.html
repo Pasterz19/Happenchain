@@ -1,0 +1,164 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Student Registration - Happen Chain</title>
+
+    <!-- Fonts & Icons -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="{% static 'authapp/css/base.css' %}">
+    <link rel="stylesheet" href="{% static 'authapp/css/student.css' %}">
+</head>
+
+<body>
+    <header id="mainHeader">
+        <div class="nav-container">
+            <a href={%url 'home' %} class="logo">
+                <i class="fas fa-link"></i> Happen Chain
+            </a>
+            <div class="auth-actions">
+                <a href={%url 'home' %} class="btn btn-outline">Back to Home</a>
+            </div>
+        </div>
+    </header>
+
+    <div class="registration-container">
+        <div class="registration-box">
+            <div style="text-align: center; margin-bottom: 20px;">
+                <h2>Student Registration</h2>
+                <p style="color: var(--text-muted); font-size: 0.9rem;">Join the community in 3 easy steps</p>
+            </div>
+
+            <div class="step-indicator">
+                <span id="labelStep1" class="active">Personal</span>
+                <span id="labelStep2">Academic</span>
+                <span id="labelStep3">Verification</span>
+            </div>
+            <div class="progress-container">
+                <div class="progress-bar" id="progressBar"></div>
+            </div>
+
+            <div class="modal-body-scrollable">
+                <form id="multiStepForm" method="POST" action="{% url 'student_register' %}"
+                    enctype="multipart/form-data">
+                    {% csrf_token %}
+
+                    <div class="form-step active" id="step1">
+                        <div class="row">
+                            <div class="col">
+                                <label class="form-label">First Name</label>
+                                <input type="text" class="form-input" name="fname" required>
+                            </div>
+                            <div class="col">
+                                <label class="form-label">Last Name</label>
+                                <input type="text" class="form-input" name="lname" required>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <label class="form-label">Email Address</label>
+                                <input type="email" class="form-input" name="email" placeholder="student@college.edu"
+                                    required>
+                            </div>
+                            <div class="col">
+                                <label class="form-label">Phone Number</label>
+                                <input type="tel" class="form-input" name="phone" placeholder="+91 98765 43210"
+                                    required>
+                            </div>
+                        </div>
+
+                        <label class="form-label">Create Password</label>
+                        <input type="password" class="form-input" name="password" placeholder="Min. 8 characters"
+                            required>
+                    </div>
+
+                    <div class="form-step" id="step2">
+                        <label class="form-label">College Name</label>
+                        <select class="form-select" id="collegeSelect" name="college"
+                            data-departments-url="{% url 'ajax_load_departments' %}" required>
+                            <option value="" disabled selected>Select your college</option>
+                            {% for c in colleges%}
+                            <option value="{{c.id}}">{{c.name}}</option>
+                            {% endfor%}
+                        </select>
+
+                        <div class="row">
+                            <div class="col">
+                                <label class="form-label">Department</label>
+                                <select class="form-select" id="departmentSelect" name="department"
+                                    data-degrees-url="{% url 'ajax_load_degrees' %}" required>
+                                    <option value="" disabled selected>Select Dept</option>
+                                </select>
+                            </div>
+                            <div class="col">
+                                <label class="form-label">Degree</label>
+                                <select class="form-select" id="degreeSelect" name="degree"
+                                    data-courses-url="{% url 'ajax_load_courses' %}" required>
+                                    <option value="" disabled selected>Select Degree</option>
+                                </select>
+                            </div>
+
+                            <div class="col">
+                                <label class="form-label">Course</label>
+                                <select class="form-select" id="courseSelect" name="course" required>
+                                    <option value="" disabled selected>Select Course</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-step" id="step3">
+                        <label class="form-label">Upload Student ID Card</label>
+                        <div class="file-upload-wrapper">
+                            <input type="file" id="idCardUpload" accept="image/*, application/pdf" required
+                                onchange="updateFileName(this, 'fileNameDisplay')" name="idphoto">
+                            <i class="fas fa-id-card"
+                                style="font-size: 2rem; color: var(--text-muted); margin-bottom: 10px;"></i>
+                            <h4 id="fileNameDisplay" style="color: white; margin-bottom: 5px;">Drag & Drop or Click to
+                                Upload</h4>
+                            <p style="font-size: 0.8rem; color: var(--text-muted);">Supports JPG, PNG, PDF (Max 5MB)</p>
+                        </div>
+
+                        <label class="form-label"
+                            style="display: flex; gap: 10px; align-items: flex-start; cursor: pointer;">
+                            <input type="checkbox" required style="margin-top: 5px; width: auto;">
+                            <span style="font-size: 0.9rem; color: var(--text-muted);">I agree to the Terms of Service
+                                and Privacy Policy of Happen Chain.</span>
+                        </label>
+                    </div>
+
+                    <div style="display: flex; justify-content: space-between; margin-top: 20px;">
+                        <button type="button" id="prevBtn" class="btn btn-prev" onclick="changeStudentStep(-1)"
+                            style="visibility: hidden;">Back</button>
+                        <button type="button" id="nextBtn" class="btn btn-primary" onclick="changeStudentStep(1)">Next
+                            Step</button>
+                        <button type="submit" id="submitBtn" class="btn btn-primary" style="display: none;">Submit
+                            Registration</button>
+                    </div>
+                </form>
+
+                <p style="text-align: center; margin-top: 20px; color: var(--text-muted); font-size: 0.9rem;">
+                    Already have an account? <a href={%url 'home' %} style="color: var(--primary);">Log In</a>
+                </p>
+            </div>
+        </div>
+    </div>
+    {% if messages %}
+    {% for message in messages %}
+    <div class="alert {{ message.tags }}">
+        {{ message }}
+    </div>
+    {% endfor %}
+    {% endif %}
+
+    <script src="{% static 'authapp/js/student.js' %}"></script>
+</body>
+
+</html>

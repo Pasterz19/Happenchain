@@ -1,0 +1,47 @@
+{% extends 'appadmin/home.html' %}
+
+{% block title %}Complaints{% endblock %}
+
+{% block content %}
+<h1>Complaints Received</h1>
+
+<table class="table table-striped table-hover">
+    <thead>
+        <tr>
+            <th>User</th>
+            <th>Issue</th>
+            <th>Against</th>
+            <th>Status</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for complaint in complaints %}
+        <tr>
+            <td>{{ complaint.user.email }}</td>
+            <td>{{ complaint.issue }}</td>
+            <td>{{ complaint.against }}</td>
+            <td>
+                {% if complaint.status == 'RESOLVED' %}
+                <span class="success">Resolved</span>
+                {% else %}
+                <span class="warning">Open</span>
+                {% endif %}
+            </td>
+            <td>
+                {% if complaint.status == 'OPEN' %}
+                <form method="POST">
+                    {% csrf_token %}
+                    <input type="hidden" name="complaint_id" value="{{ complaint.id }}">
+                    <input type="hidden" name="action" value="resolve">
+                    <button type="submit" class="btn">Resolve</button>
+                </form>
+                {% else %}
+                -
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

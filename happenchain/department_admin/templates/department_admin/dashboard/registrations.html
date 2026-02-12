@@ -1,0 +1,115 @@
+{% extends "department_admin/base/base.html" %}
+{% block title %}Registrations{% endblock %}
+
+{% block content %}
+<header class="top-bar">
+    <h1>Registrations</h1>
+</header>
+
+<div class="table-container">
+    <table id="registrationTable" class="table table-dark table-hover align-middle">
+        <thead>
+            <tr>
+                <th>Registrant</th>
+                <th>Event</th>
+                <th>Type</th>
+                <th>Date</th>
+                <th>Transaction ID</th>
+                <th>College</th>
+                <th>Course</th>
+                <th>Members</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for reg in registrations %}
+            <tr {% if reg.team %} style="cursor:pointer;" data-members='[
+        {% for tm in reg.team.teammember_set.all %}
+            {
+                "name": "{{ tm.user.first_name|escapejs }} {{ tm.user.last_name|escapejs }}",
+                "email": "{{ tm.user.email|escapejs }}",
+                "role": "{{ tm.role }}",
+                "college":"{{tm.user.appuser.college.name|escapejs}}"
+            }{% if not forloop.last %},{% endif %}
+        {% endfor %}
+    ]' {% endif %}>
+                <!-- Registrant -->
+                <td>
+                    {% if reg.user %}
+                    {{ reg.user.first_name }} {{ reg.user.last_name }}
+                    {% elif reg.team %}
+                    <strong>{{ reg.team.name }}</strong><br>
+                    <small style="color:var(--text-muted);">Click to view members</small>
+                    {% else %}
+                    —
+                    {% endif %}
+                </td>
+
+                <!-- Event -->
+                <td>
+                    {{ reg.sub_event.event.title }}<br>
+                    <small style="color:var(--text-muted);">
+                        {{ reg.sub_event.title }}
+                    </small>
+                </td>
+
+                <!-- Type -->
+                <td>{% if reg.team %}Team{% else %}Individual{% endif %}</td>
+
+                <!-- Date -->
+                <td>{{ reg.registered_at|date:"d M Y, h:i A" }}</td>
+
+                <!-- Transaction ID -->
+                <td>
+                    <span style="font-family: monospace; color: var(--primary);">
+                        {{ reg.payment.transaction_id|default:"-" }}
+                    </span>
+                    {% if reg.team %}
+                    <br>
+                    <small style="color: var(--text-muted); font-size: 0.75rem;">
+                        Members: {{ reg.team.teammember_set.count }}
+                    </small>
+                    {% endif %}
+                </td>
+
+                <!-- College -->
+                <td>
+                    {% if reg.user %}
+                    {{ reg.user.appuser.college.name }}
+                    {% elif reg.team %}
+                    -
+                    {% endif %}
+                </td>
+
+                <!-- Course -->
+                <td>
+                    {% if reg.user %}
+                    {{ reg.user.appuser.course.name }}
+                    {% elif reg.team %}
+                    {{ reg.team.created_by.appuser.course.name }}
+                    {% endif %}
+                </td>
+                <!-- ✅ HIDDEN MEMBERS COLUMN -->
+                <td>
+                    [
+                    {% for tm in reg.team.teammember_set.all %}
+                    {
+                    "name": "{{ tm.user.first_name|escapejs }} {{ tm.user.last_name|escapejs }}",
+                    "email": "{{ tm.user.email|escapejs }}",
+                    "role": "{{ tm.role }}",
+                    "college":"{{tm.user.appuser.college.name}}"
+                    }{% if not forloop.last %},{% endif %}
+                    {% endfor %}
+                    ]
+                </td>
+
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="8" style="text-align:center;">No registrations yet.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+
+    </table>
+</div>
+{% endblock %}

@@ -1,0 +1,92 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Dashboard{% endblock %}</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Outfit&family=Plus+Jakarta+Sans&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <link rel="stylesheet" href="{% static 'department_admin/css/dashboard.css' %}">
+    <link rel="stylesheet" href="{% static 'appuser/css/toast.css' %}">
+</head>
+
+<body>
+    {% if messages %}
+    <div class="toast-container">
+        {% for message in messages %}
+        <div class="toast toast-{{ message.tags }}">
+            {{ message }}
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <div class="dashboard-wrapper">
+
+        <!-- SIDEBAR -->
+        <aside class="sidebar">
+            <a href="{% url 'department_admin:dashboard-overview' %}" class="logo">
+                <i class="fas fa-link"></i> Happen Chain
+            </a>
+
+
+
+            <nav class="nav-menu">
+                <a href="{% url 'department_admin:dashboard-events' %}" class="nav-link">
+                    <i class="fas fa-calendar-alt"></i> Events
+                </a>
+
+                <a href="{% url 'department_admin:department-registrations' %}" class="nav-link">
+                    <i class="fa-solid fa-registered"></i> Event Registrations
+                </a>
+                <a href="{% url 'department_admin:student-registrations' %}" class="nav-link">
+                    <i class="fas fa-users-cog"></i> Student Registration Requests
+                </a>
+                <a href="{% url 'department_admin:my_complaints' %}" class="nav-link">
+                    <i class="fas fa-exclamation-circle"></i> Complaints
+                </a>
+            </nav>
+            <div class="user-info">
+                <a href="{% url 'department_admin:profile' %}" class="user-info user-info-link">
+                    <h4>{{ request.user.get_full_name|default:"Admin Panel" }}</h4>
+                    <p>{{ request.user.appuser.department.name }}</p>
+                </a>
+
+                <form method="post" action="{% url 'common-logout' %}">
+                    {% csrf_token %}
+                    <button class="logout-btn" type="submit">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </button>
+                </form>
+            </div>
+
+        </aside>
+
+        <!-- MAIN CONTENT -->
+        <main class="main-content">
+            {% block content %}{% endblock %}
+        </main>
+
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="{% static 'department_admin/js/dashboard.js' %}"></script>
+    <script src="{% static 'department_admin/js/department_chart.js' %}"></script>
+    <script src="{% static 'department_admin/js/modal.js' %}"></script>
+    <script src="{% static 'department_admin/js/submodal.js' %}"></script>
+    <script src="{% static 'appuser/js/toast.js' %}"></script>
+    {% block extra_js %}{% endblock %}
+</body>
+
+</html>

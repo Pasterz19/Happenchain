@@ -1,0 +1,108 @@
+{% extends "college_admin/base/base_dashboard.html" %}
+{% block title %}My Profile{% endblock %}
+
+{% block content %}
+
+<header class="top-bar">
+    <h1>My Profile</h1>
+</header>
+
+<div class="profile-card">
+
+    <!-- PROFILE HEADER -->
+    <div class="profile-header">
+        <div class="profile-avatar">
+            {{ user_obj.first_name|slice:":1" }}{{ user_obj.last_name|slice:":1" }}
+        </div>
+
+        <div class="profile-header-info">
+            <h2>{{ user_obj.get_full_name }}</h2>
+            <small>College Admin</small>
+        </div>
+    </div>
+
+    <!-- VIEW MODE -->
+    <div id="profileView" class="profile-view">
+        <p>
+            <strong>Email</strong>
+            <span>{{ user_obj.email }}</span>
+        </p>
+
+        <p>
+            <strong>College</strong>
+            <span>{{ user_obj.appuser.college.name }}</span>
+        </p>
+
+        <p>
+            <strong>Phone</strong>
+            <span>{{ user_obj.appuser.phone }}</span>
+        </p>
+
+        <div class="profile-actions">
+            <button class="btn btn-primary" onclick="toggleEdit(true)">
+                Edit Profile
+            </button>
+        </div>
+    </div>
+
+    <!-- EDIT MODE -->
+    <form method="post" id="profileEdit" class="profile-form">
+        {% csrf_token %}
+
+        <h3>Edit Profile</h3>
+
+        <label class="form-label">First Name</label>
+        <input type="text" name="first_name" class="form-input"
+               value="{{ user_obj.first_name }}" required>
+
+        <label class="form-label">Last Name</label>
+        <input type="text" name="last_name" class="form-input"
+               value="{{ user_obj.last_name }}" required>
+
+        <label class="form-label">Email</label>
+        <input type="email" name="email" class="form-input"
+               value="{{ user_obj.email }}" required>
+
+        <label class="form-label">Phone</label>
+        <input type="text" name="phone" class="form-input"
+               value="{{ user_obj.appuser.phone }}" required>
+
+        <!-- Read-only -->
+        <label class="form-label">College</label>
+        <input type="text" class="form-input"
+               value="{{ user_obj.appuser.college.name }}" disabled>
+         <!-- PASSWORD SECTION -->
+    <h3 style="margin-top: 30px;">Change Password</h3>
+
+    <label class="form-label">Current Password</label>
+    <input type="password" name="current_password"
+           class="form-input"
+           placeholder="Enter current password">
+
+    <label class="form-label">New Password</label>
+    <input type="password" name="new_password"
+           class="form-input"
+           placeholder="Enter new password">
+
+    <label class="form-label">Confirm New Password</label>
+    <input type="password" name="confirm_password"
+           class="form-input"
+           placeholder="Re-enter new password">
+
+    <div class="form-actions">
+        <button type="submit" class="btn btn-primary">Save</button>
+        <button type="button" class="btn btn-outline"
+                onclick="toggleEdit(false)">Cancel</button>
+    </div>       
+    </form>
+
+</div>
+
+<script>
+function toggleEdit(edit) {
+    document.getElementById("profileView").style.display = edit ? "none" : "block";
+    document.getElementById("profileEdit").style.display = edit ? "block" : "none";
+}
+</script>
+
+{% endblock %}

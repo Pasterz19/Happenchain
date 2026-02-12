@@ -1,0 +1,102 @@
+{% extends "appuser/base_user.html" %}
+{% load static %}
+
+{% block title %}My Registrations{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'appuser/css/registrations.css' %}">
+<link rel="stylesheet" href="{% static 'appuser/css/modal.css' %}">
+<link rel="stylesheet" href="{% static 'appuser/css/payments.css' %}"> <!-- For detail-row styles -->
+{% endblock %}
+
+{% block content %}
+
+<div class="page-header">
+    <div>
+        <h1>My Registrations</h1>
+        <p class="text-muted">Track all your upcoming and past event details.</p>
+    </div>
+    {% if registrations %}
+    <div class="stats-badge">
+        Total Events: <strong>{{ registrations|length }}</strong>
+    </div>
+    {% endif %}
+</div>
+
+<div class="registrations-card">
+    {% if registrations %}
+    <div class="table-responsive">
+        <table class="glass-table">
+            <thead>
+                <tr>
+                    <th width="40%">Event Details</th>
+                    <th>Registration Type</th>
+                    <th>Date Registered</th>
+                    <th style="text-align: right;">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for reg in registrations %}
+                <tr>
+                    <td>
+                        <div class="event-title-cell">
+                            {{ reg.sub_event.event.title }}
+                        </div>
+                        <span class="event-subtitle">
+                            <i class="fas fa-caret-right" style="color: var(--primary);"></i>
+                            {{ reg.sub_event.title }}
+                        </span>
+                    </td>
+
+                    <td>
+                        {% if reg.team %}
+                        <span class="badge badge-team">
+                            <i class="fas fa-users"></i> Team
+                        </span>
+                        <div style="font-size: 0.8rem; margin-top: 5px; color: var(--text-muted); padding-left: 5px;">
+                            {{ reg.team.name }}
+                        </div>
+                        {% else %}
+                        <span class="badge badge-individual">
+                            <i class="fas fa-user"></i> Individual
+                        </span>
+                        {% endif %}
+                    </td>
+
+                    <td style="color: var(--text-muted);">
+                        <i class="far fa-calendar-alt" style="margin-right: 6px;"></i>
+                        {{ reg.registered_at|date:"M d, Y" }}
+                    </td>
+
+                    <td style="text-align: right;">
+                        <button class="btn btn-outline btn-sm details-btn" data-event="{{ reg.sub_event.event.title }}"
+                            data-subevent="{{ reg.sub_event.title }}" data-venue="{{ reg.sub_event.venue }}"
+                            data-date="{{ reg.sub_event.start_time|date:'M d, Y h:i A' }}"
+                            data-team="{{ reg.team.name|default:'Individual' }}" data-amount="{{ reg.payment.amount }}"
+                            data-status="{{ reg.payment.payment_status }}"
+                            data-txnid="{{ reg.payment.transaction_id }}">
+                            Details
+                        </button>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div class="empty-state">
+        <i class="fas fa-ticket-alt empty-icon"></i>
+        <h3 style="margin: 0;">No registrations yet</h3>
+        <p class="text-muted" style="max-width: 400px;">
+            You haven't registered for any events yet. Explore the dashboard to find upcoming competitions and
+            workshops.
+        </p>
+        <a href="{% url 'appuser:user_dashboard' %}" class="btn btn-primary" style="margin-top: 10px;">
+            Browse Events
+        </a>
+    </div>
+    {% endif %}
+</div>
+{% include "appuser/registration_details_modal.html" %}
+<script src="{% static 'appuser/js/registration_details.js' %}"></script>
+{% endblock %}

@@ -1,0 +1,82 @@
+{% extends 'appuser/base_user.html' %}
+{% load static %}
+
+{% block title %}My Complaints | Happen Chain{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'appuser/css/complaints.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="complaints-header">
+    <h1>My Complaints</h1>
+    <p class="text-muted">Report issues or view the status of your complaints</p>
+</div>
+
+<div class="complaints-grid">
+    <!-- Complaint Form -->
+    <div class="card complaint-form-card">
+        <h3 class="section-title"><i class="fas fa-edit"></i> Submit a Complaint</h3>
+        <form method="POST" action="{% url 'appuser:submit_complaint' %}">
+            {% csrf_token %}
+
+            <div class="form-group">
+                <label class="form-label">Against <span>(Person/Entity)</span></label>
+                <input type="text" name="against" required class="form-control" placeholder="Who is this regarding?">
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Issue Description</label>
+                <textarea name="issue" required rows="5" class="form-control"
+                    placeholder="Describe the issue in detail..."></textarea>
+            </div>
+
+            <button type="submit" class="btn btn-primary" style="width: 100%;">
+                Submit Complaint <i class="fas fa-paper-plane"></i>
+            </button>
+        </form>
+    </div>
+
+    <!-- Complaints List -->
+    <div class="card complaint-history-card">
+        <h3 class="section-title"><i class="fas fa-history"></i> History</h3>
+
+        <div class="table-wrapper">
+            <table class="theme-table">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Against</th>
+                        <th>Issue</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for complaint in complaints %}
+                    <tr>
+                        <td>{{ complaint.created_at|date:"M d, Y" }}</td>
+                        <td>{{ complaint.against }}</td>
+                        <td>{{ complaint.issue }}</td>
+                        <td>
+                            {% if complaint.status == 'RESOLVED' %}
+                            <span class="status-badge status-resolved">Resolved</span>
+                            {% else %}
+                            <span class="status-badge status-open">Open</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="4" style="text-align: center; padding: 40px; color: var(--text-muted);">
+                            <i class="far fa-folder-open"
+                                style="font-size: 2rem; margin-bottom: 10px; opacity: 0.5;"></i>
+                            <p>No complaints filed yet.</p>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

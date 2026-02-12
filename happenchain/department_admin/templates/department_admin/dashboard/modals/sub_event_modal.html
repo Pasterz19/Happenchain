@@ -1,0 +1,71 @@
+<!-- Add Sub Event Modal -->
+<div id="subEventModal" class="modal-overlay">
+    <div class="modal-box modal-scrollable">
+        <!-- <span class="close-modal" onclick="closeModal('subEventModal')">&times;</span> -->
+
+        <h2 id="subEventModalTitle">Add Sub-Event</h2>
+        <p class="text-muted">
+            Parent Event:
+            <span id="parentEventName" class="highlight-text"></span>
+        </p>
+
+        <form id="subEventForm" method="POST" action="{% url 'department_admin:create-sub-event' %}">
+            {% csrf_token %}
+
+            <!-- REQUIRED: Parent Event ID -->
+            <input type="hidden" name="event_id" id="parentEventId">
+
+            <!-- Sub Event Title -->
+            <label class="form-label">Sub-Event Title</label>
+            <input type="text" name="title" id="subEventTitle" class="form-input" required>
+
+            <!-- Description -->
+            <label class="form-label">Description</label>
+            <textarea name="description" id="subEventDesc" class="form-input" rows="3" required></textarea>
+
+            <!-- Cost -->
+            <label class="form-label">Registration Cost (₹)</label>
+            <input type="number" name="cost" id="subEventCost" class="form-input" step="0.01"
+                placeholder="Leave empty if free">
+
+            <!-- Is Team Event -->
+            <label class="form-label">Is this a Team Event?</label>
+            <select name="is_team_event" class="form-select" id="isTeamSelect">
+                <option value="false">No (Individual)</option>
+                <option value="true">Yes (Team)</option>
+            </select>
+
+            <!-- Team Size -->
+            <div class="row">
+                <div class="col">
+                    <label class="form-label">Min Team Size</label>
+                    <input type="number" name="min_team_size" id="minTeamSize" class="form-input" disabled>
+                </div>
+                <div class="col">
+                    <label class="form-label">Max Team Size</label>
+                    <input type="number" name="max_team_size" id="maxTeamSize" class="form-input" disabled>
+                </div>
+            </div>
+
+            <!-- Timing -->
+            <div class="row">
+                <div class="col">
+                    <label class="form-label">Start Time</label>
+                    <input type="datetime-local" name="start_time" id="subEventStart" class="form-input" required>
+                </div>
+                <div class="col">
+                    <label class="form-label">End Time</label>
+                    <input type="datetime-local" name="end_time" id="subEventEnd" class="form-input" required>
+                </div>
+            </div>
+
+            <!-- Venue -->
+            <label class="form-label">Venue</label>
+            <input type="text" name="venue" id="subEventVenue" class="form-input" required>
+
+            <button type="submit" id="subEventSubmitBtn" class="btn btn-primary full-width">
+                Create Sub-Event
+            </button>
+        </form>
+    </div>
+</div>

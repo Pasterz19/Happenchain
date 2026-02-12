@@ -1,0 +1,68 @@
+<!-- Create Event Modal -->
+<div id="eventModal" class="modal-overlay">
+    <div class="modal-box modal-scrollable">
+        <!-- <span class="close-modal" onclick="closeModal('eventModal')">&times;</span> -->
+
+        <h2 id="eventModalTitle">Create New Event</h2>
+
+        <form id="eventForm" method="POST" enctype="multipart/form-data"
+            action="{% url 'department_admin:create-event' %}">
+            {% csrf_token %}
+
+            <!-- Event Title -->
+            <label class="form-label">Event Title</label>
+            <input type="text" name="title" id="eventTitle" class="form-input" required>
+
+            <!-- Event Type -->
+            <label class="form-label">Event Type</label>
+            <select name="event_type" id="eventType" class="form-select" required>
+                <option value="">-- Select Type --</option>
+                {% for type in event_types %}
+                <option value="{{ type.id }}">{{ type.name }}</option>
+                {% endfor %}
+            </select>
+
+            <!-- Venue -->
+            <label class="form-label">Venue</label>
+            <input type="text" name="venue" id="eventVenue" class="form-input" required>
+
+            <!-- Dates -->
+            <div class="row">
+                <div class="col">
+                    <label class="form-label">Start Date</label>
+                    <input type="date" name="start_date" id="eventStartDate" class="form-input" required>
+                </div>
+                <div class="col">
+                    <label class="form-label">End Date</label>
+                    <input type="date" name="end_date" id="eventEndDate" class="form-input" required>
+                </div>
+            </div>
+
+            <!-- Description -->
+            <label class="form-label">Description</label>
+            <textarea name="description" id="eventDescription" class="form-input" rows="3" required></textarea>
+
+            <!-- Event Photo -->
+            <label class="form-label">Event Banner</label>
+
+            <div class="file-upload-wrapper">
+                <input type="file" name="event_photo" id="eventPhotoInput" accept="image/*">
+
+                <p id="eventPhotoName">
+                    <i class="fas fa-cloud-upload-alt"></i>
+                    Click to upload image
+                </p>
+            </div>
+
+
+
+            <!-- Hidden (handled in view) -->
+            <!-- department -->
+            <!-- created_by -->
+
+            <button type="submit" id="eventSubmitBtn" class="btn btn-primary full-width">
+                Create Event
+            </button>
+        </form>
+    </div>
+</div>

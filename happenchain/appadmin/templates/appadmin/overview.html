@@ -1,0 +1,39 @@
+{% extends 'appadmin/home.html' %}
+{% load static %}
+
+{% block title %}Admin Overview{% endblock %}
+
+{% block content %}
+<h1>Admin Overview</h1>
+
+<div class="cards">
+    <div class="card">
+        <h3>Total Colleges</h3>
+        <p>{{ total_colleges }}</p>
+    </div>
+    <div class="card">
+        <h3>Total Events</h3>
+        <p>{{ total_events }}</p>
+    </div>
+    <div class="card">
+        <h3>Registrations</h3>
+        <p>{{ total_registrations }}</p>
+    </div>
+    <div class="card">
+        <h3>Complaints</h3>
+        <p class="danger">{{ pending_complaints }} Pending</p>
+    </div>
+</div>
+
+<div class="card" style="margin-top: 30px;">
+    <h3>Events Analytics (By Type)</h3>
+    <div style="height: 300px;">
+        <canvas id="eventsChart"></canvas>
+    </div>
+</div>
+
+{{ chart_labels|json_script:"chart-labels" }}
+{{ chart_data|json_script:"chart-data" }}
+
+<script src="{% static 'appadmin/js/admin_analytics.js' %}"></script>
+{% endblock %}

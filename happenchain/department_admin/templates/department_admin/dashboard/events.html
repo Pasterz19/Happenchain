@@ -1,0 +1,165 @@
+{% extends "department_admin/base/base.html" %}
+{% load static %}
+{% block title %}Events{% endblock %}
+
+{% block content %}
+<!-- FIX APPLIED -->
+<header class="top-bar">
+    <h1>Events Management</h1>
+    <button class="btn btn-primary" onclick="handleOpenCreateEvent(this)"
+        data-url="{% url 'department_admin:create-event' %}">
+        <i class="fas fa-plus"></i> Create Event
+    </button>
+</header>
+<div class="events-grid">
+    {% for event in events %}
+    <div class="card event-card-wrapper"
+        style="padding: 0; overflow: hidden; border: 1px solid var(--border-color); background: var(--bg-card);">
+
+        <!-- Main Event Card (Clickable) -->
+        <div class="event-main-card" onclick="toggleSubEvents('{{ event.id }}')"
+            style="padding: 20px; cursor: pointer; transition: background 0.3s;">
+
+            {% if event.event_photo %}
+            <div
+                style="width: 100%; height: 160px; border-radius: 12px; overflow: hidden; margin-bottom: 20px; border: 1px solid rgba(255, 255, 255, 0.05);">
+                <img src="{{ event.event_photo.url }}" alt="{{ event.title }}"
+                    style="width: 100%; height: 100%; object-fit: cover;">
+            </div>
+            {% endif %}
+
+            <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                <div>
+                    <h3 style="margin-bottom: 5px; color: var(--primary);">{{ event.title }}</h3>
+                    <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 10px;">
+                        <i class="fas fa-map-marker-alt"></i> {{ event.venue }} |
+                        <i class="fas fa-calendar"></i> {{ event.start_date|date:"M d, Y" }}
+                    </p>
+                    <span class="badge" style="background: rgba(123, 44, 191, 0.2); color: var(--accent);">
+                        {{ event.event_type.name }}
+                    </span>
+                </div>
+                <div
+                    style="text-align: right; display: flex; flex-direction: column; align-items: flex-end; gap: 10px;">
+                    <div style="display: flex; gap: 5px;">
+                        <!-- VIEW INFO BUTTON -->
+                        <button class="btn btn-sm btn-outline-info"
+                            onclick="event.stopPropagation(); handleShowEventDetails(this)"
+                            data-title="{{ event.title }}" data-desc="{{ event.description }}"
+                            data-venue="{{ event.venue }}" data-start="{{ event.start_date }}"
+                            data-end="{{ event.end_date }}" data-type="{{ event.event_type.name }}">
+                            <i class="fas fa-info-circle"></i> Info
+                        </button>
+
+                        <!-- EDIT EVENT BUTTON -->
+                        <!-- Note: data-edit-url-base="/department_admin/events/edit/" -->
+                        <button class="btn btn-sm btn-outline-warning"
+                            onclick="event.stopPropagation(); handleEditEvent(this)" data-id="{{ event.id }}"
+                            data-title="{{ event.title }}" data-type-id="{{ event.event_type.id }}"
+                            data-venue="{{ event.venue }}" data-start="{{ event.start_date|date:'Y-m-d' }}"
+                            data-end="{{ event.end_date|date:'Y-m-d' }}" data-desc="{{ event.description }}"
+                            data-edit-url-base="/department_admin/events/edit/">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                    </div>
+                    <i class="fas fa-chevron-down" id="icon-{{ event.id }}"
+                        style="transition: transform 0.3s; color: var(--text-muted);"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- Collapsible Sub-Events Section -->
+        <div id="subevents-{{ event.id }}" class="sub-events-section"
+            style="display: none; background: rgba(0,0,0,0.2); border-top: 1px solid var(--border-color); padding: 20px;">
+
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                <h4 style="font-size: 1rem; color: white;">Sub-Events</h4>
+                <button class="btn btn-sm btn-outline"
+                    onclick="event.stopPropagation(); handlePrepareCreateSubEvent(this)" data-event-id="{{ event.id }}"
+                    data-event-title="{{ event.title }}" data-url="{% url 'department_admin:create-sub-event' %}">
+                    <i class="fas fa-plus"></i> Add Sub-Event
+                </button>
+            </div>
+
+            {% if event.subevent_set.all %}
+            <div style="display: grid; gap: 10px;">
+                {% for sub in event.subevent_set.all %}
+                <div
+                    style="background: rgba(255,255,255,0.05); padding: 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.05); display: flex; justify-content: space-between; align-items: center;">
+                    <div>
+                        <strong style="display: block; color: var(--text-main);">{{ sub.title }}</strong>
+                        <small style="color: var(--text-muted);">{{ sub.start_time|time:"g:i A" }} -
+                            {{sub.end_time|time:"g:i A" }}</small>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        {% if sub.is_team_event %}
+                        <span class="badge"
+                            style="background: rgba(0, 229, 255, 0.1); color: var(--primary);">Team</span>
+                        {% else %}
+                        <span class="badge" style="background: rgba(255, 165, 0, 0.1); color: orange;">Individual</span>
+                        {% endif %}
+
+                        <!-- SUB EVENT INFO -->
+                        <button class="btn btn-sm btn-ghost" style="color: var(--text-muted); padding: 2px 6px;"
+                            onclick="handleShowSubEventDetails(this)" data-title="{{ sub.title }}"
+                            data-desc="{{ sub.description }}" data-cost="{{ sub.cost }}" data-venue="{{ sub.venue }}"
+                            data-start="{{ sub.start_time }}" data-end="{{ sub.end_time }}"
+                            data-is-team="{{ sub.is_team_event }}" data-min="{{ sub.min_team_size }}"
+                            data-max="{{ sub.max_team_size }}">
+                            <i class="fas fa-eye"></i>
+                        </button>
+
+                        <!-- EDIT SUB EVENT -->
+                        <button class="btn btn-sm btn-ghost" style="color: var(--accent); padding: 2px 6px;"
+                            onclick="handleEditSubEvent(this)" data-id="{{ sub.id }}" data-title="{{ sub.title }}"
+                            data-desc="{{ sub.description }}" data-cost="{{ sub.cost|default_if_none:'' }}"
+                            data-venue="{{ sub.venue }}" data-start="{{ sub.start_time|date:'Y-m-d\TH:i' }}"
+                            data-end="{{ sub.end_time|date:'Y-m-d\TH:i' }}" data-is-team="{{ sub.is_team_event }}"
+                            data-min="{{ sub.min_team_size|default_if_none:'' }}"
+                            data-max="{{ sub.max_team_size|default_if_none:'' }}" data-event-title="{{ event.title }}"
+                            data-edit-url-base="/department_admin/sub-events/edit/">
+                            <i class="fas fa-pencil-alt"></i>
+                        </button>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <p style="color: var(--text-muted); font-style: italic; text-align: center; padding: 10px;">No sub-events
+                added yet.</p>
+            {% endif %}
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<!-- Details Modal -->
+<div id="infoModal" class="modal-overlay"
+    style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; z-index:2000; background:rgba(0,0,0,0.8); align-items:center; justify-content:center;">
+    <div
+        style="background: #1a1a2e; width:90%; max-width:500px; padding:30px; border-radius:15px; position:relative; border:1px solid rgba(255,255,255,0.1);">
+        <span onclick="document.getElementById('infoModal').style.display='none'"
+            style="position:absolute; top:15px; right:20px; font-size:24px; cursor:pointer; color:#fff;">&times;</span>
+
+        <h2 id="infoTitle" style="color: var(--primary); margin-bottom: 15px;"></h2>
+        <div id="infoContent" style="color: var(--text-muted); line-height: 1.6;"></div>
+    </div>
+</div>
+
+<!-- Scripts -->
+<script src="{% static 'department_admin/js/events.js' %}"></script>
+<script>
+    // Close modal on outside click (keep this here or move to JS file)
+    window.onclick = function (e) {
+        const m = document.getElementById('infoModal');
+        if (e.target === m) m.style.display = 'none';
+
+        if (e.target.classList.contains('modal-overlay')) {
+            e.target.style.display = 'none';
+        }
+    }
+</script>
+
+{% include "department_admin/dashboard/modals/event_modal.html" %}
+{% include "department_admin/dashboard/modals/sub_event_modal.html" %}
+{% endblock %}

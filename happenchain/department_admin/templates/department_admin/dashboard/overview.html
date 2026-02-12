@@ -1,0 +1,36 @@
+{% extends "department_admin/base/base.html" %}
+{% block title %}Overview{% endblock %}
+
+{% block content %}
+<header class="top-bar">
+    <h1>Dashboard Overview</h1>
+</header>
+
+<div class="stats-grid">
+    <div class="stat-card">
+        <i class="fas fa-laptop-code icon-bg"></i>
+        <h3>{{ active_events }}</h3>
+        <p>Active Events</p>
+    </div>
+    <div class="stat-card">
+        <i class="fas fa-user-clock icon-bg"></i>
+        <h3>{{ pending }}</h3>
+        <p>Pending Approvals</p>
+    </div>
+    <div class="stat-card">
+        <i class="fas fa-ticket-alt icon-bg"></i>
+        <h3>{{ registrations }}</h3>
+        <p>Total Registrations</p>
+    </div>
+</div>
+
+<div
+    style="margin-top: 40px; background: var(--bg-card); padding: 25px; border-radius: 16px; border: 1px solid var(--border-color);">
+    <h3 style="margin-bottom: 20px; color: white;">Event Registrations Overview</h3>
+    <div style="height: 400px; width: 100%;">
+        <canvas id="deptChart"></canvas>
+    </div>
+    {{ chart_labels|json_script:"labels" }}
+    {{ chart_data|json_script:"values" }}
+</div>
+{% endblock %}

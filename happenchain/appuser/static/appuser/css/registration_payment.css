@@ -1,0 +1,100 @@
+/* =========================
+   PAGE WRAPPER
+========================= */
+.reg-pay-container {
+    max-width: 640px;
+    margin: 40px auto;
+    padding: 0 16px;
+}
+
+/* =========================
+   CARD
+========================= */
+.reg-pay-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 18px;
+    padding: 32px;
+    box-shadow: 0 0 28px rgba(99, 102, 241, 0.2);
+}
+
+/* =========================
+   HEADINGS
+========================= */
+.reg-pay-card h2 {
+    text-align: center;
+    margin-bottom: 22px;
+}
+
+.reg-pay-card h3 {
+    text-align: center;
+    margin: 20px 0;
+    color: var(--primary);
+}
+
+/* =========================
+   DETAILS ROWS
+========================= */
+.detail-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 12px;
+    font-size: 0.95rem;
+}
+
+.detail-row span {
+    color: var(--text-muted);
+}
+
+/* =========================
+   TEAM SECTION
+========================= */
+.team-section {
+    margin-top: 18px;
+}
+
+.team-section h4 {
+    margin-bottom: 10px;
+    font-size: 0.95rem;
+}
+
+.team-section ul {
+    padding-left: 18px;
+}
+
+.team-section li {
+    font-size: 0.9rem;
+    margin-bottom: 5px;
+    color: var(--text-muted);
+}
+
+/* =========================
+   DIVIDER
+========================= */
+.reg-divider {
+    margin: 22px 0;
+    border: none;
+    border-top: 1px solid var(--border-color);
+}
+
+/* =========================
+   BUTTONS
+========================= */
+.reg-pay-card .btn {
+    width: 100%;
+    margin-top: 16px;
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+@media (max-width: 600px) {
+    .reg-pay-card {
+        padding: 24px;
+    }
+
+    .detail-row {
+        flex-direction: column;
+        gap: 4px;
+    }
+}

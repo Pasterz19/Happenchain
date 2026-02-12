@@ -1,0 +1,87 @@
+{% extends "department_admin/base/base.html" %}
+{% block title %}My Profile{% endblock %}
+
+{% block content %}
+<header class="top-bar">
+    <h1>My Profile</h1>
+</header>
+
+<div class="profile-card">
+
+    <!-- PROFILE HEADER -->
+    <div class="profile-header">
+        <div class="profile-avatar">
+            {{ user.first_name|slice:":1" }}{{ user.last_name|slice:":1" }}
+        </div>
+
+        <div class="profile-header-info">
+            <h2>{{ user.get_full_name }}</h2>
+            <small>Department Admin</small>
+        </div>
+    </div>
+
+    <!-- VIEW MODE -->
+    <div id="profileView" class="profile-view">
+        <p>
+            <strong>Email</strong>
+            <span>{{ user.email }}</span>
+        </p>
+        <p>
+            <strong>College</strong>
+            <span>{{ appuser.college.name }}</span>
+        </p>
+        <p>
+            <strong>Department</strong>
+            <span>{{ appuser.department.name }}</span>
+        </p>
+
+        <div class="profile-actions">
+            <button class="btn btn-primary" onclick="toggleEdit(true)">
+                Edit Profile
+            </button>
+        </div>
+    </div>
+
+    <!-- EDIT MODE -->
+    <form method="post" id="profileEdit" class="profile-form">
+        {% csrf_token %}
+
+        <h3>Edit Profile</h3>
+
+        <label class="form-label">First Name</label>
+        <input type="text" name="first_name" class="form-input"
+               value="{{ user.first_name }}" required>
+
+        <label class="form-label">Last Name</label>
+        <input type="text" name="last_name" class="form-input"
+               value="{{ user.last_name }}" required>
+
+        <label class="form-label">Email</label>
+        <input type="email" name="email" class="form-input"
+               value="{{ user.email }}" required>
+
+        <!-- Read-only fields -->
+        <label class="form-label">College</label>
+        <input type="text" class="form-input"
+               value="{{ appuser.college.name }}" disabled>
+
+        <label class="form-label">Department</label>
+        <input type="text" class="form-input"
+               value="{{ appuser.department.name }}" disabled>
+
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary">Save</button>
+            <button type="button" class="btn btn-outline"
+                    onclick="toggleEdit(false)">Cancel</button>
+        </div>
+    </form>
+
+</div>
+
+<script>
+function toggleEdit(edit) {
+    document.getElementById("profileView").style.display = edit ? "none" : "block";
+    document.getElementById("profileEdit").style.display = edit ? "block" : "none";
+}
+</script>
+{% endblock %}

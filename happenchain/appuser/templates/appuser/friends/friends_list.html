@@ -1,0 +1,64 @@
+{% extends "appuser/base_user.html" %}
+{% load static %}
+
+{% block title %}Friends | Happen Chain{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'appuser/css/friends.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="friends-container">
+
+    <div style="text-align: center; margin-bottom: 30px;">
+        <h1>Friends & Connections</h1>
+        <p class="text-muted">Connect with others and share experiences</p>
+    </div>
+
+    <!-- FRIENDS LIST -->
+    <div class="friends-card">
+        <h2><i class="fas fa-users" style="color: var(--primary);"></i> My Friends</h2>
+
+        {% if friends %}
+        {% for friend in friends %}
+        <div class="friend-item">
+            <div class="friend-info">
+                <span class="friend-name">{{ friend.get_full_name|default:friend.username }}</span>
+                <small class="friend-email">{{ friend.email }}</small>
+            </div>
+            <button class="btn btn-outline" style="padding: 5px 10px; font-size: 0.8rem;">
+                <i class="fas fa-user-check"></i> Connected
+            </button>
+        </div>
+        {% endfor %}
+        {% else %}
+        <div class="empty-state">
+            You have no friends yet. Start connecting!
+        </div>
+        {% endif %}
+    </div>
+
+    <!-- ADD FRIEND -->
+    <div class="friends-card">
+        <h3><i class="fas fa-user-plus" style="color: var(--secondary);"></i> Add New Friend</h3>
+
+        <form method="POST" class="add-friend-form">
+            {% csrf_token %}
+            <input type="email" name="email" class="form-input" placeholder="Enter friend's email address..." required>
+            <button class="btn btn-primary">
+                Send Request
+            </button>
+        </form>
+    </div>
+
+    <!-- REQUESTS LINK -->
+    <div style="text-align:center; margin-top: 20px;">
+        <a href="{% url 'appuser:friend_requests' %}" class="btn btn-outline"
+            style="width: 100%; justify-content: space-between;">
+            <span>View Friend Requests</span>
+            <i class="fas fa-arrow-right"></i>
+        </a>
+    </div>
+
+</div>
+{% endblock %}

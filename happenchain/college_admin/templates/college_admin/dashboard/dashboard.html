@@ -1,0 +1,77 @@
+{% extends "college_admin/base/base_dashboard.html" %}
+{% block title %}Dashboard Overview{% endblock %}
+
+{% block content %}
+
+<header class="top-bar">
+    <div class="welcome-text">
+        <h1>Dashboard Overview</h1>
+        <p class="text-muted">Manage department access and monitor college events.</p>
+    </div>
+</header>
+
+<!-- STATS -->
+<div class="stats-grid">
+    <div class="stat-card">
+        <div class="icon-box blue"><i class="fas fa-calendar-check"></i></div>
+        <div>
+            <h3>{{ total_events }}</h3>
+            <p>Total Events</p>
+        </div>
+    </div>
+
+    <div class="stat-card">
+        <div class="icon-box purple"><i class="fas fa-building"></i></div>
+        <div>
+            <h3>{{ total_departments }}</h3>
+            <p>Departments</p>
+        </div>
+    </div>
+
+    <div class="stat-card">
+        <div class="icon-box orange"><i class="fas fa-users"></i></div>
+        <div>
+            <h3>{{ total_registrations }}</h3>
+            <p>Registrations</p>
+        </div>
+    </div>
+</div>
+
+<!-- CONTENT -->
+<div class="content-grid">
+
+    <!-- Latest Events -->
+    <div class="card">
+        <div class="card-header">
+            <h3><i class="fas fa-clock"></i> Latest Events</h3>
+        </div>
+
+        {% for event in latest_events %}
+        <div class="event-item">
+            <div class="event-details">
+                <h5>{{ event.title }}</h5>
+                <p class="text-muted">
+                    {{ event.department.name }} • {{ event.start_date|date:"M d, Y" }}
+                </p>
+            </div>
+        </div>
+        {% empty %}
+        <p class="text-muted">No events found.</p>
+        {% endfor %}
+    </div>
+
+    <!-- Chart -->
+    <div class="card">
+        <div class="card-header">
+            <h3><i class="fas fa-chart-bar"></i> Top Event Registrations</h3>
+        </div>
+
+        <!-- 🔥 DATA PASSED SAFELY -->
+        <canvas id="registrationChart"></canvas>
+        {{ chart_labels|json_script:"labels" }}
+        {{ chart_data|json_script:"values" }}
+    </div>
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,59 @@
+/* =========================
+   FRIENDS LIST PAGE
+========================= */
+
+.friends-container {
+    max-width: 700px;
+    margin: 0 auto;
+}
+
+.friends-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    padding: 25px;
+    margin-bottom: 30px;
+}
+
+.friends-card h2 {
+    margin-bottom: 20px;
+}
+
+/* FRIEND ITEM */
+.friend-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 16px;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.03);
+    margin-bottom: 10px;
+}
+
+.friend-item span {
+    font-weight: 500;
+    color: white;
+}
+
+.friend-item small {
+    color: var(--text-muted);
+}
+
+/* ADD FRIEND FORM */
+.add-friend-form {
+    display: flex;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.add-friend-form input {
+    flex: 1;
+}
+
+/* EMPTY STATE */
+.empty-state {
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    padding: 20px;
+}

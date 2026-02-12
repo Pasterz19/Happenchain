@@ -1,0 +1,128 @@
+/* Page Header */
+    .page-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 30px;
+    }
+    
+    .stats-badge {
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        padding: 8px 16px;
+        border-radius: 50px;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+    }
+    .stats-badge strong { color: white; margin-left: 5px; }
+
+    /* Glass Table Container */
+    .registrations-card {
+        background: var(--bg-card);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        border-radius: 16px;
+        overflow: hidden; /* Clips the table corners */
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Table Styles */
+    .table-responsive {
+        width: 100%;
+        overflow-x: auto;
+    }
+
+    .glass-table {
+        width: 100%;
+        border-collapse: collapse;
+        color: var(--text-main);
+    }
+
+    .glass-table thead {
+        background: rgba(0, 0, 0, 0.2);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .glass-table th {
+        padding: 20px 25px;
+        text-align: left;
+        font-size: 0.8rem;
+        text-transform: uppercase;
+        letter-spacing: 1.2px;
+        color: var(--text-muted);
+        font-weight: 600;
+    }
+
+    .glass-table td {
+        padding: 20px 25px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        vertical-align: middle;
+        font-size: 0.95rem;
+    }
+
+    /* Row Hover Effect */
+    .glass-table tbody tr {
+        transition: background 0.3s ease;
+    }
+    .glass-table tbody tr:hover {
+        background: rgba(255, 255, 255, 0.03);
+    }
+    .glass-table tbody tr:last-child td {
+        border-bottom: none;
+    }
+
+    /* Type Badges */
+    .badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 6px 14px;
+        border-radius: 50px;
+        font-size: 0.75rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .badge-individual {
+        background: rgba(0, 229, 255, 0.1);
+        color: var(--primary);
+        border: 1px solid rgba(0, 229, 255, 0.2);
+        box-shadow: 0 0 10px rgba(0, 229, 255, 0.1);
+    }
+
+    .badge-team {
+        background: rgba(123, 44, 191, 0.15);
+        color: #d0a3ff; /* Lighter purple for contrast */
+        border: 1px solid rgba(123, 44, 191, 0.3);
+        box-shadow: 0 0 10px rgba(123, 44, 191, 0.1);
+    }
+
+    /* Event Title Style */
+    .event-title-cell {
+        font-weight: 600;
+        color: white;
+    }
+    .event-subtitle {
+        display: block;
+        font-size: 0.85rem;
+        color: var(--text-muted);
+        margin-top: 4px;
+    }
+
+    /* Empty State */
+    .empty-state {
+        text-align: center;
+        padding: 80px 20px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 20px;
+    }
+    .empty-icon {
+        font-size: 3rem;
+        color: var(--text-muted);
+        opacity: 0.5;
+        margin-bottom: 10px;
+    }

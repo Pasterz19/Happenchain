@@ -1,0 +1,41 @@
+<div id="registerModal" class="modal-overlay">
+    <div class="modal">
+        <h3 style="margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
+            Register for Event
+        </h3>
+
+        <form method="GET" action="{% url 'appuser:registration_details' %}">
+
+            <input type="hidden" name="sub_event_id" id="subEventInput">
+
+            <div id="teamSection" style="display:none; margin-bottom: 25px;">
+    <div class="form-group">
+        <label class="form-label">Team Name</label>
+        <input class="form-input" name="team_name" id="teamNameInput" placeholder="Enter your team name">
+    </div>
+
+    <h4 style="font-size: 0.9rem; color: var(--text-muted, #94A3B8); margin: 20px 0 10px;">Select Team Members</h4>
+    
+    <div class="friend-list-container">
+        {% for friend in friends %}
+            <label class="friend-item">
+                <input type="checkbox" name="team_members" value="{{ friend.id }}">
+                <span style="color: #fff; font-size: 0.95rem;">{{ friend.username }}</span>
+            </label>
+        {% empty %}
+            <p style="text-align:center; color: var(--text-muted); padding: 20px;">No friends found.</p>
+        {% endfor %}
+    </div>
+</div>
+
+            <div style="display: flex; gap: 10px; margin-top: 25px;">
+                <button class="btn btn-primary" style="flex: 1;">
+                    Proceed <i class="fas fa-chevron-right"></i>
+                </button>
+                <button type="button" class="btn btn-outline" onclick="closeRegisterModal()">
+                    Cancel
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

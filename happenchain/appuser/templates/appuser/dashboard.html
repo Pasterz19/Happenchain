@@ -1,0 +1,60 @@
+{% extends 'appuser/base_user.html' %}
+{% load static %}
+
+{% block title %}Dashboard | Happen Chain{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'appuser/css/dashboard.css' %}">
+<link rel="stylesheet" href="{% static 'appuser/css/modal.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="dashboard-header">
+    <div>
+        <h1>Events Happening Now</h1>
+        <p class="text-muted">Explore and register for upcoming events</p>
+    </div>
+</div>
+
+<div class="events-grid">
+    {% for event in events %}
+    <div class="event-card">
+        <div>
+            {% if event.event_photo %}
+            <div class="card-img-wrapper">
+                <img src="{{ event.event_photo.url }}" alt="{{ event.title }}">
+            </div>
+            {% endif %}
+            <div class="event-meta-badge">
+                <span class="event-type-badge">{{ event.event_type.name }}</span>
+                <span class="event-venue-badge"><i class="fas fa-map-marker-alt"></i> {{ event.venue }}</span>
+            </div>
+            <h3 class="event-title">{{ event.title }}</h3>
+            <p class="event-desc">{{ event.description|truncatechars:100 }}</p>
+        </div>
+
+        <div class="card-actions">
+            <button class="btn btn-primary" data-event-id="{{ event.id }}">
+                View Sub Events <i class="fas fa-arrow-right"></i>
+            </button>
+        </div>
+    </div>
+    {% empty %}
+    <div class="empty-state">
+        <i class="far fa-calendar-times"></i>
+        <p>No events available at the moment.</p>
+    </div>
+    {% endfor %}
+</div>
+
+{% include "appuser/sub_events_modal.html" %}
+{% include "appuser/register_modal.html" %}
+{% endblock %}
+
+{% block scripts %}
+<script>
+    const FETCH_SUB_EVENTS_URL = "{% url 'appuser:fetch_sub_events' 0 %}";
+</script>
+<script src="{% static 'appuser/js/sub_events.js' %}"></script>
+<script src="{% static 'appuser/js/modal.js' %}"></script>
+{% endblock %}
